@@ -1,4 +1,4 @@
-package com.ivos.ivos_weather_app.ui.theme
+package com.ivos.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

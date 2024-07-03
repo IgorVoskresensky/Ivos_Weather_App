@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.dagger.hilt.android)
     alias(libs.plugins.devtools.ksp)
 }
@@ -29,6 +30,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        compose = true
+    }
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -41,6 +45,11 @@ dependencies {
     //Core
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.mvi.kotlin)
+    implementation(libs.mvi.kotlin.main)
+    implementation(libs.mvi.kotlin.extensions.coroutines)
+    implementation(libs.decompose)
+    implementation(libs.decompose.extensions)
 
     //Compose UI
     implementation(libs.androidx.activity.compose)
@@ -49,6 +58,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.material.icons)
     implementation(libs.splash.screen)
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.accompanist.permissions)
@@ -62,18 +72,6 @@ dependencies {
     implementation(platform(libs.arrow.stack))
     implementation(libs.arrow.core)
     implementation(libs.arrow.fx.coroutines)
-
-    //Ktor
-    implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.android)
-    implementation(libs.ktor.negotiation)
-    implementation(libs.ktor.json)
-    implementation(libs.ktor.client.cio)
-    implementation(libs.ktor.client.logging)
-    implementation(libs.ktor.client.resources)
-    implementation(libs.ktor.client.okhttp)
-    implementation(libs.ktor.client.mock)
-    implementation(libs.ktor.client.auth)
 
     //Coroutines
     implementation(libs.coroutines.core)
@@ -92,10 +90,6 @@ dependencies {
     //Dagger Test
     androidTestImplementation(libs.dagger.hilt.testing)
     kspAndroidTest(libs.dagger.hilt.android.compiler)
-
-    //Input Masks
-    implementation(libs.decoro)
-    implementation(libs.input.mask.android)
 
     //Viewmodel Ktx
     implementation(libs.viewmodel.ktx)
