@@ -1,0 +1,162 @@
+[versions]
+agp = "8.5.0"
+kotlin = "2.0.0"
+coreKtx = "1.13.1"
+viewmodel-ktx-ver = "2.8.3"
+lifecycleRuntimeKtx = "2.8.3"
+
+accompanist-ver = "0.32.0"
+accompanist-swiperefresh-ver = "0.32.0"
+accompanist-permissions-ver = "0.32.0"
+
+junit = "4.13.2"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+
+activityCompose = "1.9.0"
+composeBom = "2024.06.00"
+compose-viewmodel-ver = "2.8.3"
+compose-ver = "1.6.8"
+
+coroutines-ver = "1.8.0"
+
+arrow-ver = "1.2.1"
+
+coil-ver = "2.5.0"
+
+dagger-hilt-ver = "2.50"
+hilt-navigation = "1.2.0"
+
+datastore-ver = "1.1.1"
+datastore-preferences-ver = "1.1.1"
+kotlinx-collections-immutable-ver = "0.3.7"
+kotlinx-serialization-ver = "1.6.2"
+
+room_version = "2.6.1"
+
+decoro-ver = "1.5.2"
+redmadrobot-ver = "6.0.0"
+
+gradle-android-cache-fix-ver = "3.0"
+
+ktor-ver = "2.3.7"
+
+ksp = "2.0.0-1.0.21"
+
+mockk-ver = "1.13.9"
+kotest-ver = "5.7.2"
+kotest-assertions-arrow-ver = "1.4.0"
+kotlinxCoroutinesTest = "1.7.3"
+
+appcompat-ver = "1.7.0"
+splash-screen-ver = "1.0.1"
+material = "1.12.0"
+
+
+[libraries]
+#core
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+tools-build-gradle-classpath = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "viewmodel-ktx-ver" }
+
+#compose
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+compose-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "compose-viewmodel-ver" }
+compose-animation = { module = "androidx.compose.animation:animation", version.ref = "compose-ver" }
+
+# Accompanist
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist-ver" }
+accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist-ver" }
+accompanist-pager-indicator = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist-ver" }
+accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist-swiperefresh-ver" }
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist-permissions-ver" }
+
+#UI
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat-ver" }
+splash-screen = { module = "androidx.core:core-splashscreen", version.ref = "splash-screen-ver" }
+
+#Arrow
+arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow-ver" }
+arrow-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines", version.ref = "arrow-ver" }
+arrow-stack = { module = "io.arrow-kt:arrow-stack", version.ref = "arrow-ver" }
+
+#Ktor client
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor-ver" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor-ver" }
+ktor-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor-ver" }
+ktor-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor-ver" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor-ver" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor-ver" }
+ktor-client-resources = { module = "io.ktor:ktor-client-resources", version.ref = "ktor-ver" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor-ver" }
+ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor-ver" }
+ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor-ver" }
+
+#Coroutines
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines-ver" }
+coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines-ver" }
+
+#Coil
+coil = { module = "io.coil-kt:coil", version.ref = "coil-ver" }
+coil-svg = { module = "io.coil-kt:coil-svg", version.ref = "coil-ver" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-ver" }
+
+#Dagger Hilt
+dagger-hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger-hilt-ver" }
+dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger-hilt-ver" }
+dagger-hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "dagger-hilt-ver" }
+dagger-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "dagger-hilt-ver" }
+hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation" }
+
+#Datastore
+data-store = { module = "androidx.datastore:datastore", version.ref = "datastore-ver" }
+data-store-prefs = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-preferences-ver" }
+data-store-collect = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable-ver" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-ver" }
+
+#Room
+room = { module = "androidx.room:room-runtime", version.ref = "room_version" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room_version" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room_version" }
+
+#Input Masks
+decoro = { module = "ru.tinkoff.decoro:decoro", version.ref = "decoro-ver" }
+input-mask-android = { module = "com.redmadrobot:input-mask-android", version.ref = "redmadrobot-ver" }
+
+#Test
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+
+#MockK
+mockk = { module = "io.mockk:mockk", version.ref = "mockk-ver" }
+mockk-agent = { module = "io.mockk:mockk-agent", version.ref = "mockk-ver" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk-ver" }
+
+#Kotest
+kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest-ver" }
+kotest-assertions-arrow = { module = "io.kotest.extensions:kotest-assertions-arrow", version.ref = "kotest-assertions-arrow-ver" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+com-android-library = { id = "com.android.library", version.ref = "agp" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+gradle-android-cacheFix = { id = "org.gradle.android.cache-fix", version.ref = "gradle-android-cache-fix-ver" }
+dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt-ver" }
+
