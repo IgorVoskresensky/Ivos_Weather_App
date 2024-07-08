@@ -47,6 +47,10 @@ dependencies {
     //Ktor
     implementation(libs.ktor.client.core)
 
+    //Retrofit
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.core)
+
     //Room
     implementation(libs.room)
     implementation(libs.room.ktx)
