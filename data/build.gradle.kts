@@ -14,6 +14,12 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        val key = property("apiKey")?.toString() ?: error(
+            "add api key to properties"
+        )
+
+        buildConfigField("String", "API_KEY", "\"$key\"")
     }
 
     buildTypes {
@@ -24,6 +30,9 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+    buildFeatures {
+        buildConfig = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -49,7 +58,7 @@ dependencies {
 
     //Retrofit
     implementation(libs.retrofit.core)
-    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.json)
 
     //Room
     implementation(libs.room)
