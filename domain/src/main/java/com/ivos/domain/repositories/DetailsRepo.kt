@@ -1,6 +1,5 @@
 package com.ivos.domain.repositories
 
-import com.ivos.domain.entities.City
 import com.ivos.domain.entities.Forecast
 import com.ivos.domain.entities.Weather
 
