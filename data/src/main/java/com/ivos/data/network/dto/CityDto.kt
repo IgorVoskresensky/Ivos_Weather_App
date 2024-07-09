@@ -1,4 +1,4 @@
-package com.ivos.data.dto
+package com.ivos.data.network.dto
 
 import com.google.gson.annotations.SerializedName
 

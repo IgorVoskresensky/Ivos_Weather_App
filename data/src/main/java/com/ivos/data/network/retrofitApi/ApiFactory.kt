@@ -1,4 +1,4 @@
-package com.ivos.data.retrofitApi
+package com.ivos.data.network.retrofitApi
 
 import com.ivos.common.BASE_URL
 import com.ivos.data.BuildConfig

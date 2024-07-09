@@ -1,8 +1,8 @@
-package com.ivos.data.retrofitApi
+package com.ivos.data.network.retrofitApi
 
-import com.ivos.data.dto.CityDto
-import com.ivos.data.dto.WeatherCurrentDto
-import com.ivos.data.dto.WeatherForecastDto
+import com.ivos.data.network.dto.CityDto
+import com.ivos.data.network.dto.WeatherCurrentDto
+import com.ivos.data.network.dto.WeatherForecastDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 

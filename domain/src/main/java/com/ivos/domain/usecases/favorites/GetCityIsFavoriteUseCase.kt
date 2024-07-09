@@ -3,7 +3,7 @@ package com.ivos.domain.usecases.favorites
 import com.ivos.domain.repositories.FavoritesRepo
 import javax.inject.Inject
 
-class GetIsFavoriteCityUseCase @Inject constructor(
+class GetCityIsFavoriteUseCase @Inject constructor(
     private val repo: FavoritesRepo,
 ) {
 
