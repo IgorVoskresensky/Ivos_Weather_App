@@ -1,4 +1,4 @@
-package com.ivos.common
+package com.ivos.common.utils
 
 import java.util.Calendar
 import java.util.Date
