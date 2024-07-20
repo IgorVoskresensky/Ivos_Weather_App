@@ -1,6 +1,5 @@
 package com.ivos.domain.usecases.favorites
 
-import com.ivos.domain.entities.City
 import com.ivos.domain.repositories.FavoritesRepo
 import javax.inject.Inject
 
