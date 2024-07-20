@@ -1,6 +1,6 @@
 package com.ivos.data.network.retrofitApi
 
-import com.ivos.common.BASE_URL
+import com.ivos.common.utils.BASE_URL
 import com.ivos.data.BuildConfig
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

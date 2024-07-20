@@ -1,7 +1,7 @@
 package com.ivos.data.mappers
 
-import com.ivos.common.PROTOCOL
-import com.ivos.common.toCalendar
+import com.ivos.common.utils.PROTOCOL
+import com.ivos.common.utils.toCalendar
 import com.ivos.data.network.dto.ForecastDayDto
 import com.ivos.data.network.dto.WeatherCurrentDto
 import com.ivos.data.network.dto.WeatherDto

@@ -5,9 +5,12 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.ivos.presentation.features.search.SearchStore.*
+import com.ivos.presentation.features.search.SearchStore.Intent
+import com.ivos.presentation.features.search.SearchStore.Label
+import com.ivos.presentation.features.search.SearchStore.State
+import javax.inject.Inject
 
-internal interface SearchStore : Store<Intent, State, Label> {
+interface SearchStore : Store<Intent, State, Label> {
 
     sealed interface Intent
 
@@ -16,7 +19,7 @@ internal interface SearchStore : Store<Intent, State, Label> {
     sealed interface Label
 }
 
-internal class SearchStoreFactory(
+class SearchStoreFactory @Inject constructor(
     private val factory : StoreFactory,
 ) {
     fun create(): SearchStore =

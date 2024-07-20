@@ -32,7 +32,7 @@ hilt-navigation = "1.2.0"
 datastore-ver = "1.1.1"
 datastore-preferences-ver = "1.1.1"
 kotlinx-collections-immutable-ver = "0.3.7"
-kotlinx-serialization-ver = "1.6.2"
+kotlinx-serialization-ver = "1.6.3"
 
 room_version = "2.6.1"
 
@@ -46,7 +46,7 @@ ksp = "2.0.0-1.0.21"
 mockk-ver = "1.13.9"
 kotest-ver = "5.7.2"
 kotest-assertions-arrow-ver = "1.4.0"
-kotlinxCoroutinesTest = "1.7.3"
+kotlinxCoroutinesTest = "1.8.1"
 
 appcompat-ver = "1.7.0"
 splash-screen-ver = "1.0.1"
