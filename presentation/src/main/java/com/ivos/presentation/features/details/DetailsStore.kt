@@ -3,12 +3,14 @@ package com.ivos.presentation.features.details
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.arkivanov.mvikotlin.core.store.create
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.ivos.presentation.features.details.DetailsStore.*
+import com.ivos.presentation.features.details.DetailsStore.Intent
+import com.ivos.presentation.features.details.DetailsStore.Label
+import com.ivos.presentation.features.details.DetailsStore.State
+import javax.inject.Inject
 
-internal interface DetailsStore : Store<Intent, State, Label> {
+interface DetailsStore : Store<Intent, State, Label> {
 
     sealed interface Intent
 
@@ -17,7 +19,7 @@ internal interface DetailsStore : Store<Intent, State, Label> {
     sealed interface Label
 }
 
-internal class DetailsStoreFactory(
+class DetailsStoreFactory @Inject constructor(
     private val factory : StoreFactory,
 ) {
     fun create(): DetailsStore =

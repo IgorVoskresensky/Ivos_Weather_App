@@ -5,10 +5,13 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.ivos.presentation.features.favorites.FavoritesStore.*
+import com.ivos.presentation.features.favorites.FavoritesStore.Intent
+import com.ivos.presentation.features.favorites.FavoritesStore.Label
+import com.ivos.presentation.features.favorites.FavoritesStore.State
+import javax.inject.Inject
 
 
-internal interface FavoritesStore : Store<Intent, State, Label> {
+interface FavoritesStore : Store<Intent, State, Label> {
 
     sealed interface Intent
 
@@ -17,7 +20,7 @@ internal interface FavoritesStore : Store<Intent, State, Label> {
     sealed interface Label
 }
 
-internal class FavoritesStoreFactory(
+class FavoritesStoreFactory @Inject constructor(
     private val factory : StoreFactory,
 ) {
     fun create(): FavoritesStore =
