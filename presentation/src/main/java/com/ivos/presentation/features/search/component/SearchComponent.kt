@@ -1,7 +1,7 @@
-package com.ivos.presentation.features.search
+package com.ivos.presentation.features.search.component
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.mvikotlin.core.instancekeeper.getStore
+import com.ivos.presentation.features.search.store.SearchStoreFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -15,7 +15,7 @@ class SearchComponentImpl @AssistedInject constructor(
     @Assisted("componentContext") componentContext: ComponentContext,
 ) : SearchComponent, ComponentContext by componentContext {
 
-    private val store = instanceKeeper.getStore { storeFactory.create() }
+    /*private val store = instanceKeeper.getStore { storeFactory.create() }*/
 
     @AssistedFactory
     interface Factory {
