@@ -12,20 +12,11 @@ import com.ivos.domain.usecases.favorites.ChangeCityIsFavoriteStatusUseCase
 import com.ivos.domain.usecases.favorites.GetCityIsFavoriteUseCase
 import com.ivos.presentation.features.details.store.DetailsStore.Intent
 import com.ivos.presentation.features.details.store.DetailsStore.Label
-import com.ivos.presentation.features.details.store.DetailsStore.Label.ClickBackLabel
 import com.ivos.presentation.features.details.store.DetailsStore.State
 import com.ivos.presentation.features.details.store.DetailsStore.State.ForecastState.Error
 import com.ivos.presentation.features.details.store.DetailsStore.State.ForecastState.Initial
 import com.ivos.presentation.features.details.store.DetailsStore.State.ForecastState.Loading
 import com.ivos.presentation.features.details.store.DetailsStore.State.ForecastState.Success
-import com.ivos.presentation.features.details.store.DetailsStoreFactory.Action.FavoriteStatusChangedAction
-import com.ivos.presentation.features.details.store.DetailsStoreFactory.Action.ForecastErrorAction
-import com.ivos.presentation.features.details.store.DetailsStoreFactory.Action.ForecastLoadedAction
-import com.ivos.presentation.features.details.store.DetailsStoreFactory.Action.ForecastLoadingAction
-import com.ivos.presentation.features.details.store.DetailsStoreFactory.Msg.FavoriteStatusChangedMsg
-import com.ivos.presentation.features.details.store.DetailsStoreFactory.Msg.ForecastErrorMsg
-import com.ivos.presentation.features.details.store.DetailsStoreFactory.Msg.ForecastLoadedMsg
-import com.ivos.presentation.features.details.store.DetailsStoreFactory.Msg.ForecastLoadingMsg
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,9 +24,9 @@ interface DetailsStore : Store<Intent, State, Label> {
 
     sealed interface Intent {
 
-        data object ClickBackIntent : Intent
+        data object ClickBack : Intent
 
-        data object ChangeFavoriteStatusIntent : Intent
+        data object ChangeFavoriteStatus : Intent
     }
 
     data class State(
@@ -58,7 +49,7 @@ interface DetailsStore : Store<Intent, State, Label> {
 
     sealed interface Label {
 
-        data object ClickBackLabel : Label
+        data object ClickBack : Label
     }
 }
 
@@ -79,41 +70,41 @@ class DetailsStoreFactory @Inject constructor(
 
     private sealed interface Action {
 
-        data class FavoriteStatusChangedAction(val isFavorite: Boolean) : Action
+        data class FavoriteStatusChanged(val isFavorite: Boolean) : Action
 
-        data class ForecastLoadedAction(val forecast: Forecast) : Action
+        data class ForecastLoaded(val forecast: Forecast) : Action
 
-        data object ForecastLoadingAction : Action
+        data object ForecastLoading : Action
 
-        data object ForecastErrorAction : Action
+        data object ForecastError : Action
     }
 
     private sealed interface Msg {
 
-        data class FavoriteStatusChangedMsg(val isFavorite: Boolean) : Msg
+        data class FavoriteStatusChanged(val isFavorite: Boolean) : Msg
 
-        data class ForecastLoadedMsg(val forecast: Forecast) : Msg
+        data class ForecastLoaded(val forecast: Forecast) : Msg
 
-        data object ForecastLoadingMsg : Msg
+        data object ForecastLoading : Msg
 
-        data object ForecastErrorMsg : Msg
+        data object ForecastError : Msg
     }
 
     private inner class BootstrapperImpl(val city: City) : CoroutineBootstrapper<Action>() {
         override fun invoke() {
             scope.launch {
                 getCityIsFavoriteUseCase(city.id).collect {
-                    dispatch(FavoriteStatusChangedAction(it))
+                    dispatch(Action.FavoriteStatusChanged(it))
                 }
             }
 
             scope.launch {
-                dispatch(ForecastLoadingAction)
+                dispatch(Action.ForecastLoading)
                 try {
                     val forecast = getForecastUseCase(city.id)
-                    dispatch(ForecastLoadedAction(forecast))
+                    dispatch(Action.ForecastLoaded(forecast))
                 } catch (e: Exception) {
-                    dispatch(ForecastErrorAction)
+                    dispatch(Action.ForecastError)
                 }
             }
         }
@@ -122,31 +113,31 @@ class DetailsStoreFactory @Inject constructor(
     private inner class ExecutorImpl : CoroutineExecutor<Intent, Action, State, Msg, Label>() {
         override fun executeIntent(intent: Intent) {
             when (intent) {
-                Intent.ChangeFavoriteStatusIntent -> {
+                Intent.ChangeFavoriteStatus -> {
                     val state = state()
                     scope.launch {
                         changeCityIsFavoriteStatusUseCase(state.city, !state.isFavorite)
                     }
                 }
-                Intent.ClickBackIntent -> {
-                    publish(ClickBackLabel)
+                Intent.ClickBack -> {
+                    publish(Label.ClickBack)
                 }
             }
         }
 
         override fun executeAction(action: Action) {
             when (action) {
-                is FavoriteStatusChangedAction -> {
-                    dispatch(FavoriteStatusChangedMsg(action.isFavorite))
+                is Action.FavoriteStatusChanged -> {
+                    dispatch(Msg.FavoriteStatusChanged(action.isFavorite))
                 }
-                is ForecastErrorAction -> {
-                    dispatch(ForecastErrorMsg)
+                is Action.ForecastError -> {
+                    dispatch(Msg.ForecastError)
                 }
-                is ForecastLoadedAction -> {
-                    dispatch(ForecastLoadedMsg(action.forecast))
+                is Action.ForecastLoaded -> {
+                    dispatch(Msg.ForecastLoaded(action.forecast))
                 }
-                is ForecastLoadingAction -> {
-                    dispatch(ForecastLoadingMsg)
+                is Action.ForecastLoading -> {
+                    dispatch(Msg.ForecastLoading)
                 }
             }
         }
@@ -154,16 +145,16 @@ class DetailsStoreFactory @Inject constructor(
 
     private object ReducerImpl : Reducer<State, Msg> {
         override fun State.reduce(msg: Msg): State = when (msg) {
-            is FavoriteStatusChangedMsg -> {
+            is Msg.FavoriteStatusChanged -> {
                 copy(isFavorite = msg.isFavorite)
             }
-            is ForecastErrorMsg -> {
+            is Msg.ForecastError -> {
                 copy(forecastState = Error)
             }
-            is ForecastLoadedMsg -> {
+            is Msg.ForecastLoaded -> {
                 copy(forecastState = Success(msg.forecast))
             }
-            is ForecastLoadingMsg -> {
+            is Msg.ForecastLoading -> {
                 copy(forecastState = Loading)
             }
         }

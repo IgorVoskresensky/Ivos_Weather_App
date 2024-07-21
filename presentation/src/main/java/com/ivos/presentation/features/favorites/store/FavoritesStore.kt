@@ -9,24 +9,13 @@ import com.ivos.domain.entities.City
 import com.ivos.domain.usecases.details.GetWeatherUseCase
 import com.ivos.domain.usecases.favorites.GetFavoriteCitiesUseCase
 import com.ivos.presentation.features.favorites.store.FavoritesStore.Intent
-import com.ivos.presentation.features.favorites.store.FavoritesStore.Intent.ClickAddToFavoritesIntent
-import com.ivos.presentation.features.favorites.store.FavoritesStore.Intent.ClickOnCityItemIntent
-import com.ivos.presentation.features.favorites.store.FavoritesStore.Intent.ClickSearchIntent
 import com.ivos.presentation.features.favorites.store.FavoritesStore.Label
-import com.ivos.presentation.features.favorites.store.FavoritesStore.Label.ClickAddToFavoritesLabel
-import com.ivos.presentation.features.favorites.store.FavoritesStore.Label.ClickOnCityItemLabel
-import com.ivos.presentation.features.favorites.store.FavoritesStore.Label.ClickSearchLabel
 import com.ivos.presentation.features.favorites.store.FavoritesStore.State
 import com.ivos.presentation.features.favorites.store.FavoritesStore.State.CityItem
 import com.ivos.presentation.features.favorites.store.FavoritesStore.State.FavoritesWeatherState.Error
 import com.ivos.presentation.features.favorites.store.FavoritesStore.State.FavoritesWeatherState.Initial
 import com.ivos.presentation.features.favorites.store.FavoritesStore.State.FavoritesWeatherState.Loading
 import com.ivos.presentation.features.favorites.store.FavoritesStore.State.FavoritesWeatherState.Success
-import com.ivos.presentation.features.favorites.store.FavoritesStoreFactory.Action.FavoriteCitiesLoadedAction
-import com.ivos.presentation.features.favorites.store.FavoritesStoreFactory.Msg.FavoriteCitiesLoadedMsg
-import com.ivos.presentation.features.favorites.store.FavoritesStoreFactory.Msg.WeatherIsLoadingMsg
-import com.ivos.presentation.features.favorites.store.FavoritesStoreFactory.Msg.WeatherLoadedErrorMsg
-import com.ivos.presentation.features.favorites.store.FavoritesStoreFactory.Msg.WeatherLoadedMsg
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,11 +24,11 @@ interface FavoritesStore : Store<Intent, State, Label> {
 
     sealed interface Intent {
 
-        data object ClickSearchIntent: Intent
+        data object ClickSearch : Intent
 
-        data object ClickAddToFavoritesIntent : Intent
+        data object ClickAddToFavorites : Intent
 
-        data class ClickOnCityItemIntent(val city: City) : Intent
+        data class ClickOnCityItem(val city: City) : Intent
     }
 
     data class State(
@@ -68,11 +57,11 @@ interface FavoritesStore : Store<Intent, State, Label> {
 
     sealed interface Label {
 
-        data object ClickSearchLabel: Label
+        data object ClickSearch : Label
 
-        data object ClickAddToFavoritesLabel : Label
+        data object ClickAddToFavorites : Label
 
-        data class ClickOnCityItemLabel(val city: City) : Label
+        data class ClickOnCityItem(val city: City) : Label
     }
 }
 
@@ -92,56 +81,54 @@ class FavoritesStoreFactory @Inject constructor(
 
     private sealed interface Action {
 
-        data class FavoriteCitiesLoadedAction(val cities: List<City>) : Action
+        data class FavoriteCitiesLoaded(val cities: List<City>) : Action
     }
 
     private sealed interface Msg {
 
-        data class FavoriteCitiesLoadedMsg(val cities: List<City>) : Msg
+        data class FavoriteCitiesLoaded(val cities: List<City>) : Msg
 
-        data class WeatherLoadedMsg(
+        data class WeatherLoaded(
             val cityId: Int,
             val tempC: Double,
             val iconUrl: String,
         ) : Msg
 
-        data class WeatherLoadedErrorMsg(val cityId: Int) : Msg
+        data class WeatherLoadedError(val cityId: Int) : Msg
 
-        data class WeatherIsLoadingMsg(val cityId: Int) : Msg
+        data class WeatherIsLoading(val cityId: Int) : Msg
     }
 
     private inner class BootstrapperImpl : CoroutineBootstrapper<Action>() {
-
         override fun invoke() {
             scope.launch {
                 getFavoriteCitiesUseCase().collect {
-                    dispatch(FavoriteCitiesLoadedAction(it))
+                    dispatch(Action.FavoriteCitiesLoaded(it))
                 }
             }
         }
     }
 
     private inner class ExecutorImpl : CoroutineExecutor<Intent, Action, State, Msg, Label>() {
-
         override fun executeIntent(intent: Intent) {
             when (intent) {
-                is ClickAddToFavoritesIntent -> {
-                    publish(ClickAddToFavoritesLabel)
+                is Intent.ClickAddToFavorites -> {
+                    publish(Label.ClickAddToFavorites)
                 }
-                is ClickOnCityItemIntent -> {
-                    publish(ClickOnCityItemLabel(intent.city))
+                is Intent.ClickOnCityItem -> {
+                    publish(Label.ClickOnCityItem(intent.city))
                 }
-                is ClickSearchIntent -> {
-                    publish(ClickSearchLabel)
+                is Intent.ClickSearch -> {
+                    publish(Label.ClickSearch)
                 }
             }
         }
 
         override fun executeAction(action: Action) {
             when (action) {
-                is FavoriteCitiesLoadedAction -> {
+                is Action.FavoriteCitiesLoaded -> {
                     val cities = action.cities
-                    dispatch(FavoriteCitiesLoadedMsg(cities))
+                    dispatch(Msg.FavoriteCitiesLoaded(cities))
                     cities.forEach {
                         scope.launch {
                             loadWeatherForCity(it)
@@ -152,11 +139,11 @@ class FavoritesStoreFactory @Inject constructor(
         }
 
         private suspend fun loadWeatherForCity(city: City) {
-            dispatch(WeatherIsLoadingMsg(city.id))
+            dispatch(Msg.WeatherIsLoading(city.id))
             try {
                 with(getWeatherUseCase(city.id)) {
                     dispatch(
-                        WeatherLoadedMsg(
+                        Msg.WeatherLoaded(
                             cityId = city.id,
                             tempC = tempC,
                             iconUrl = iconUrl,
@@ -164,15 +151,14 @@ class FavoritesStoreFactory @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
-                dispatch(WeatherLoadedErrorMsg(city.id))
+                dispatch(Msg.WeatherLoadedError(city.id))
             }
         }
     }
 
     private object ReducerImpl : Reducer<State, Msg> {
-
         override fun State.reduce(msg: Msg) = when (msg) {
-            is FavoriteCitiesLoadedMsg -> {
+            is Msg.FavoriteCitiesLoaded -> {
                 copy(
                     cityItems = msg.cities.map {
                         CityItem(
@@ -182,7 +168,7 @@ class FavoritesStoreFactory @Inject constructor(
                     }
                 )
             }
-            is WeatherIsLoadingMsg -> {
+            is Msg.WeatherIsLoading -> {
                 copy(
                     cityItems = cityItems.map {
                         if (it.city.id == msg.cityId) {
@@ -191,7 +177,7 @@ class FavoritesStoreFactory @Inject constructor(
                     }
                 )
             }
-            is WeatherLoadedErrorMsg -> {
+            is Msg.WeatherLoadedError -> {
                 copy(
                     cityItems = cityItems.map {
                         if (it.city.id == msg.cityId) {
@@ -202,7 +188,7 @@ class FavoritesStoreFactory @Inject constructor(
                     }
                 )
             }
-            is WeatherLoadedMsg -> {
+            is Msg.WeatherLoaded -> {
                 copy(
                     cityItems = cityItems.map {
                         if (it.city.id == msg.cityId) {
