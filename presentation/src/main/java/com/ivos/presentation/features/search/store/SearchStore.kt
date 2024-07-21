@@ -1,16 +1,16 @@
-package com.ivos.presentation.features.details
+package com.ivos.presentation.features.search.store
 
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.ivos.presentation.features.details.DetailsStore.Intent
-import com.ivos.presentation.features.details.DetailsStore.Label
-import com.ivos.presentation.features.details.DetailsStore.State
+import com.ivos.presentation.features.search.store.SearchStore.Intent
+import com.ivos.presentation.features.search.store.SearchStore.Label
+import com.ivos.presentation.features.search.store.SearchStore.State
 import javax.inject.Inject
 
-interface DetailsStore : Store<Intent, State, Label> {
+interface SearchStore : Store<Intent, State, Label> {
 
     sealed interface Intent
 
@@ -19,14 +19,14 @@ interface DetailsStore : Store<Intent, State, Label> {
     sealed interface Label
 }
 
-class DetailsStoreFactory @Inject constructor(
+class SearchStoreFactory @Inject constructor(
     private val factory : StoreFactory,
 ) {
-    fun create(): DetailsStore =
-        object : DetailsStore, Store<Intent, State, Label> by factory.create(
-            name = "DetailsStore",
+    fun create(): SearchStore =
+        object : SearchStore, Store<Intent, State, Label> by factory.create(
+            name = "FavoritesStore",
             initialState = State(Unit),
-            executorFactory = ::ExecutorImpl,
+            executorFactory = SearchStoreFactory::ExecutorImpl,
             bootstrapper = BootstrapperImpl(),
             reducer = ReducerImpl,
         ) {}
@@ -50,6 +50,6 @@ class DetailsStoreFactory @Inject constructor(
     }
 
     private object ReducerImpl : Reducer<State, Msg> {
-        override fun State.reduce(msg: Msg) = State(Unit)
+        override fun State.reduce(msg: Msg) = State(kotlin.Unit)
     }
 }

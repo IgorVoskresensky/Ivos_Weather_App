@@ -1,4 +1,4 @@
-package com.ivos.presentation.features.favorites
+package com.ivos.presentation.features.favorites.store
 
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
@@ -8,25 +8,25 @@ import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.ivos.domain.entities.City
 import com.ivos.domain.usecases.details.GetWeatherUseCase
 import com.ivos.domain.usecases.favorites.GetFavoriteCitiesUseCase
-import com.ivos.presentation.features.favorites.FavoritesStore.Intent
-import com.ivos.presentation.features.favorites.FavoritesStore.Intent.ClickAddToFavoritesIntent
-import com.ivos.presentation.features.favorites.FavoritesStore.Intent.ClickOnCityItemIntent
-import com.ivos.presentation.features.favorites.FavoritesStore.Intent.ClickSearchIntent
-import com.ivos.presentation.features.favorites.FavoritesStore.Label
-import com.ivos.presentation.features.favorites.FavoritesStore.Label.ClickAddToFavoritesLabel
-import com.ivos.presentation.features.favorites.FavoritesStore.Label.ClickOnCityItemLabel
-import com.ivos.presentation.features.favorites.FavoritesStore.Label.ClickSearchLabel
-import com.ivos.presentation.features.favorites.FavoritesStore.State
-import com.ivos.presentation.features.favorites.FavoritesStore.State.CityItem
-import com.ivos.presentation.features.favorites.FavoritesStore.State.FavoritesWeatherState.Error
-import com.ivos.presentation.features.favorites.FavoritesStore.State.FavoritesWeatherState.Initial
-import com.ivos.presentation.features.favorites.FavoritesStore.State.FavoritesWeatherState.Loaded
-import com.ivos.presentation.features.favorites.FavoritesStore.State.FavoritesWeatherState.Loading
-import com.ivos.presentation.features.favorites.FavoritesStoreFactory.Action.FavoriteCitiesLoadedAction
-import com.ivos.presentation.features.favorites.FavoritesStoreFactory.Msg.FavoriteCitiesLoadedMsg
-import com.ivos.presentation.features.favorites.FavoritesStoreFactory.Msg.WeatherIsLoadingMsg
-import com.ivos.presentation.features.favorites.FavoritesStoreFactory.Msg.WeatherLoadedErrorMsg
-import com.ivos.presentation.features.favorites.FavoritesStoreFactory.Msg.WeatherLoadedMsg
+import com.ivos.presentation.features.favorites.store.FavoritesStore.Intent
+import com.ivos.presentation.features.favorites.store.FavoritesStore.Intent.ClickAddToFavoritesIntent
+import com.ivos.presentation.features.favorites.store.FavoritesStore.Intent.ClickOnCityItemIntent
+import com.ivos.presentation.features.favorites.store.FavoritesStore.Intent.ClickSearchIntent
+import com.ivos.presentation.features.favorites.store.FavoritesStore.Label
+import com.ivos.presentation.features.favorites.store.FavoritesStore.Label.ClickAddToFavoritesLabel
+import com.ivos.presentation.features.favorites.store.FavoritesStore.Label.ClickOnCityItemLabel
+import com.ivos.presentation.features.favorites.store.FavoritesStore.Label.ClickSearchLabel
+import com.ivos.presentation.features.favorites.store.FavoritesStore.State
+import com.ivos.presentation.features.favorites.store.FavoritesStore.State.CityItem
+import com.ivos.presentation.features.favorites.store.FavoritesStore.State.FavoritesWeatherState.Error
+import com.ivos.presentation.features.favorites.store.FavoritesStore.State.FavoritesWeatherState.Initial
+import com.ivos.presentation.features.favorites.store.FavoritesStore.State.FavoritesWeatherState.Loading
+import com.ivos.presentation.features.favorites.store.FavoritesStore.State.FavoritesWeatherState.Success
+import com.ivos.presentation.features.favorites.store.FavoritesStoreFactory.Action.FavoriteCitiesLoadedAction
+import com.ivos.presentation.features.favorites.store.FavoritesStoreFactory.Msg.FavoriteCitiesLoadedMsg
+import com.ivos.presentation.features.favorites.store.FavoritesStoreFactory.Msg.WeatherIsLoadingMsg
+import com.ivos.presentation.features.favorites.store.FavoritesStoreFactory.Msg.WeatherLoadedErrorMsg
+import com.ivos.presentation.features.favorites.store.FavoritesStoreFactory.Msg.WeatherLoadedMsg
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -43,12 +43,12 @@ interface FavoritesStore : Store<Intent, State, Label> {
     }
 
     data class State(
-        val cityItems: List<CityItem>,
+        val cityItems: List<CityItem> = listOf(),
     ) {
 
         data class CityItem(
-            val city: City,
-            val weatherState: FavoritesWeatherState,
+            val city: City = City(),
+            val weatherState: FavoritesWeatherState = Initial,
         )
 
         sealed interface FavoritesWeatherState {
@@ -59,7 +59,7 @@ interface FavoritesStore : Store<Intent, State, Label> {
 
             data object Error : FavoritesWeatherState
 
-            data class Loaded(
+            data class Success(
                 val tempC: Double,
                 val iconUrl: String,
             ) : FavoritesWeatherState
@@ -84,7 +84,7 @@ class FavoritesStoreFactory @Inject constructor(
     fun create(): FavoritesStore =
         object : FavoritesStore, Store<Intent, State, Label> by factory.create(
             name = "FavoritesStore",
-            initialState = State(listOf()),
+            initialState = State(),
             executorFactory = ::ExecutorImpl,
             bootstrapper = BootstrapperImpl(),
             reducer = ReducerImpl,
@@ -207,7 +207,7 @@ class FavoritesStoreFactory @Inject constructor(
                     cityItems = cityItems.map {
                         if (it.city.id == msg.cityId) {
                             it.copy(
-                                weatherState = Loaded(
+                                weatherState = Success(
                                     tempC = msg.tempC,
                                     iconUrl = msg.iconUrl
                                 )
