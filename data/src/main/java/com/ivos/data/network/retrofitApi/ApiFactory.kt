@@ -20,7 +20,6 @@ object ApiFactory {
             val modifiedRequest = request.newBuilder()
                 .url(newUrl)
                 .build()
-
             it.proceed(modifiedRequest)
         }.build()
 
