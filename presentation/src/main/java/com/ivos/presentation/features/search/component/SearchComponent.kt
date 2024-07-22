@@ -33,7 +33,7 @@ interface SearchComponent{
 
 class SearchComponentImpl @AssistedInject constructor(
     private val storeFactory: SearchStoreFactory,
-    @Assisted("mode") private val mode: Mode,
+    @Assisted("mode") mode: Mode,
     @Assisted("onClickBack") onClickBack: () -> Unit,
     @Assisted("onClickDetails") onClickDetails: (City) -> Unit,
     @Assisted("onClickSave") onClickSave: () -> Unit,
@@ -68,7 +68,6 @@ class SearchComponentImpl @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-
         fun create(
             @Assisted("mode") mode: Mode,
             @Assisted("onClickBack") onClickBack: () -> Unit,
