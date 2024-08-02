@@ -2,6 +2,7 @@ package com.ivos.presentation.features.favorites.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +20,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -40,6 +40,7 @@ import com.ivos.common.utils.formatTempToString
 import com.ivos.presentation.features.favorites.component.FavoritesComponent
 import com.ivos.presentation.features.favorites.store.FavoritesStore
 import com.ivos.presentation.features.favorites.store.FavoritesStore.State.CityItem
+import com.ivos.presentation.ui.sharedUi.FullScreenProgress
 import com.ivos.presentation.utiles.Gradients
 
 @Composable
@@ -59,8 +60,7 @@ fun FavoritesContent(
             SearchField()
 
             LazyVerticalGrid(
-                modifier = modifier
-                    .fillMaxWidth(),
+                modifier = modifier.fillMaxWidth(),
                 columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -70,7 +70,10 @@ fun FavoritesContent(
                     items = state.cityItems,
                     key = { it.city.id }
                 ) {
-                    FavoriteItemCard(item = it)
+                    FavoriteItemCard(
+                        item = it,
+                        onClick = { component.onClickCity(it.city) }
+                    )
                 }
             }
         }
@@ -97,6 +100,7 @@ fun FavoritesContent(
 fun FavoriteItemCard(
     modifier: Modifier = Modifier,
     item: CityItem,
+    onClick: () -> Unit,
 ) {
     Card(
         modifier = modifier
@@ -106,21 +110,15 @@ fun FavoriteItemCard(
                 elevation = 10.dp,
                 shape = MaterialTheme.shapes.medium,
                 spotColor = Gradients.night.shadow
-            ),
+            )
+            .clickable { onClick() },
         border = BorderStroke(2.dp, Gradients.night.secondary),
     ) {
         when (item.weatherState) {
             is FavoritesStore.State.FavoritesWeatherState.Error -> {}
             is FavoritesStore.State.FavoritesWeatherState.Initial -> {}
             is FavoritesStore.State.FavoritesWeatherState.Loading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Gradients.night.primary),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
+                FullScreenProgress()
             }
             is FavoritesStore.State.FavoritesWeatherState.Success -> {
                 Box(

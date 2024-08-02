@@ -17,6 +17,7 @@ import com.ivos.presentation.features.details.store.DetailsStore.State.ForecastS
 import com.ivos.presentation.features.details.store.DetailsStore.State.ForecastState.Initial
 import com.ivos.presentation.features.details.store.DetailsStore.State.ForecastState.Loading
 import com.ivos.presentation.features.details.store.DetailsStore.State.ForecastState.Success
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -62,7 +63,7 @@ class DetailsStoreFactory @Inject constructor(
     fun create(city: City): DetailsStore =
         object : DetailsStore, Store<Intent, State, Label> by factory.create(
             name = "DetailsStore",
-            initialState = State(),
+            initialState = State(city = city),
             executorFactory = ::ExecutorImpl,
             bootstrapper = BootstrapperImpl(city),
             reducer = ReducerImpl,
@@ -115,7 +116,7 @@ class DetailsStoreFactory @Inject constructor(
             when (intent) {
                 Intent.ChangeFavoriteStatus -> {
                     val state = state()
-                    scope.launch {
+                    scope.launch(Dispatchers.IO) {
                         changeCityIsFavoriteStatusUseCase(state.city, !state.isFavorite)
                     }
                 }
