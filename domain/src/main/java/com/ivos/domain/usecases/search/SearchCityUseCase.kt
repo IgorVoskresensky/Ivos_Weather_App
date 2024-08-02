@@ -1,6 +1,5 @@
 package com.ivos.domain.usecases.search
 
-import com.ivos.domain.repositories.FavoritesRepo
 import com.ivos.domain.repositories.SearchRepo
 import javax.inject.Inject
 
