@@ -9,15 +9,19 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,20 +53,25 @@ fun FavoritesContent(
         modifier = modifier
             .fillMaxSize()
     ) {
-        LazyVerticalGrid(
-            modifier = modifier
-                .align(Alignment.TopCenter)
-                .fillMaxWidth(),
-            columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+        Column(
+            modifier.align(Alignment.TopCenter)
         ) {
-            items(
-                items = state.cityItems,
-                key = { it.city.id }
+            SearchField()
+
+            LazyVerticalGrid(
+                modifier = modifier
+                    .fillMaxWidth(),
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                FavoriteItemCard(item = it)
+                items(
+                    items = state.cityItems,
+                    key = { it.city.id }
+                ) {
+                    FavoriteItemCard(item = it)
+                }
             }
         }
 
@@ -72,6 +81,8 @@ fun FavoritesContent(
                 .align(Alignment.BottomEnd)
                 .size(80.dp)
                 .clip(CircleShape),
+            containerColor = MaterialTheme.colorScheme.onBackground,
+            contentColor = MaterialTheme.colorScheme.background,
             onClick = { component.onClickAddToFavorites() }
         ) {
             Text(
@@ -156,5 +167,37 @@ fun FavoriteItemCard(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun SearchField(
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(40.dp)
+            .padding(horizontal = 32.dp)
+            .background(
+                color = MaterialTheme.colorScheme.onBackground,
+                shape = MaterialTheme.shapes.medium,
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Icon(
+            modifier = Modifier.padding(start = 16.dp),
+            imageVector = Icons.Default.Search,
+            tint = MaterialTheme.colorScheme.background,
+            contentDescription = ""
+        )
+        
+        Text(
+            modifier = modifier/*.padding(16.dp)*/,
+            text = "Search",
+            color = MaterialTheme.colorScheme.background,
+            style = MaterialTheme.typography.bodyMedium,
+        )
     }
 }
